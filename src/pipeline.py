@@ -1,17 +1,8 @@
+from templates import data_preprocessing as dp
+
 # Data Preparation
 import pandas as pd
 import numpy as np
-
-# Model Training
-from sklearn.preprocessing import MinMaxScaler
-from imblearn.over_sampling import SMOTE
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-
-# Model Deployment
-from skl2onnx import convert_sklearn
-from skl2onnx.common.data_types import FloatTensorType
-import onnxruntime as rt
 
 #Utils
 import logging
@@ -21,7 +12,7 @@ import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 
-class Pipeline:   
+class Pipeline():   
     
     def __init__(self, dropped_columns, renamed_columns):
 

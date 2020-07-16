@@ -51,15 +51,15 @@ class Pipeline:
         return data
 
 
-    # #Step2: Impute Missings
-    # def missing_imputer(self, df, var, replace='missing'):
-    #     '''
-    #     Imputes '?' character with 'missing' label
-    #     :params: data, var, replace
-    #     :return: Series
-    #     '''
-    #     df = df.copy()
+    #Step2: Impute Missings
+    def missing_imputer(self, data, replace='missing'):
+        '''
+        Imputes '?' character with 'missing' label
+        :params: data, var, replace
+        :return: Series
+        '''
+        df = df.copy()
 
-    #     return data[var].replace('?', replace)
+        return data[var].replace('?', replace)
 
     
