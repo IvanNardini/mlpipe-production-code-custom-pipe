@@ -1,7 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: train
   name: train
+  namespace: ml-test
 spec:
   replicas: 1
   selector:
@@ -13,5 +16,6 @@ spec:
         app: train
     spec:
       containers:
-      - name: trainer #POD name
-        image: ml-test:v3
+      - image: ml-test:v3
+        name: train #POD name
+      volumes: null
