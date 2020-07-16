@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./procedural_ml_pipe
+cd ./object-oriented-pipe
 
 for script in $*; do
     if [ $script == 'train' ]; then

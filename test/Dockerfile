@@ -23,8 +23,6 @@ COPY . .
 
 RUN chmod +x ./run.sh
 
-# COPY . .
+# "/bin/bash", "./run.sh", "train", "score"
 
-# CMD [ "python3", "./train.py" ]
-
-CMD ["/bin/bash", "./run.sh", "train", "score"]
+CMD ["/bin/bash", "./run.sh", "train"]
