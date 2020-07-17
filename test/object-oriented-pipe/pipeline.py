@@ -17,7 +17,7 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Pipeline(Preprocessing):   
     
-    def __init__(self, dropped_columns, renamed_columns, missing_predictors, binning_meta):
+    def __init__(self, dropped_columns, renamed_columns, missing_predictors, binning_meta, encoding_meta):
 
         #Data
         self.data = None
@@ -26,6 +26,7 @@ class Pipeline(Preprocessing):
         self.dropped_columns = dropped_columns
         self.renamed_columns = renamed_columns
         self.binning_meta = binning_meta
+        self.encoding_meta = encoding_meta
 
         # self.target = target
         # self.predictors = predictors
@@ -44,17 +45,15 @@ class Pipeline(Preprocessing):
         #Engineering metadata (derived)
         self.missing_predictors = []
         self.dummies_meta = {}
-        self.encoding_meta = {}
 
     #fit pipeline
     def fit(self, data):
 
         #MetaData
         self.data = data
-        self.missing_predictors = [col for col in data.select_dtypes(include='object').columns if any(data[col].str.contains('?', regex=False))]
-        
+        self.missing_predictors = [col for col in self.data.select_dtypes(include='object').columns if any(self.data[col].str.contains('?', regex=False))]
 
-        # ===================================================================================================== #
+        # =====================================================================================================
 
         #Step1: Arrange Data
         self.data = Preprocessing.data_preparer(self, self.data, self.dropped_columns, self.renamed_columns)
@@ -62,6 +61,8 @@ class Pipeline(Preprocessing):
         self.data = Preprocessing.missing_imputer(self, self.data, self.missing_predictors, replace='missing')
         #Step3: Binning Variables
         self.data = Preprocessing.binner(self, self.data, self.binning_meta)
+        # #Step4: Encoding Variables
+        self.data = Preprocessing.encoder(self, self.data, self.encoding_meta)
         return self
 
 

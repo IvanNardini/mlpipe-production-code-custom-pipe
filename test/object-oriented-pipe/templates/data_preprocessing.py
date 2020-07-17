@@ -53,5 +53,19 @@ class Preprocessing:
             data.drop(var, axis=1, inplace=True)
         return data
 
+    def encoder(self, data, encoding_meta):
+        '''
+        Encode all variables for training
+        :params: data, var, mapping
+        :return: DataFrame
+        '''
+        data = data.copy()
+        for var, meta in encoding_meta.items():
+            if var not in data.columns.values.tolist():
+                pass
+            data[var] = data[var].map(encoding_meta)
+        return data
+
+
     
     

@@ -15,7 +15,8 @@ pipeline = Pipeline(
                     dropped_columns=config['dropped_columns'],
                     renamed_columns=config['renamed_columns'],
                     missing_predictors=config['missing_predictors'], 
-                    binning_meta=config['binning_meta']
+                    binning_meta=config['binning_meta'],
+                    encoding_meta=config['encoding_meta']
                 )
 
 if __name__ == "__main__":
@@ -26,4 +27,4 @@ if __name__ == "__main__":
 
     df = pd.read_csv(config['paths']['data_path'])
     test = pipeline.fit(df)
-    print(test.data.head(20))
+    print(test.data.fraud_reported.head(10))
