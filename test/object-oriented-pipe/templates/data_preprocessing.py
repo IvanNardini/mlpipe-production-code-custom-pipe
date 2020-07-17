@@ -19,7 +19,7 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Preprocessing:
 
-    def data_preparer(self, data, dropped_columns, renamed_columns):
+    def Data_Preparer(self, data, dropped_columns, renamed_columns):
         '''
         Drop and Rename columns
         :params: data, columns_to_drop
@@ -30,7 +30,7 @@ class Preprocessing:
         data.rename(columns=renamed_columns, inplace=True)
         return data
 
-    def missing_imputer(self, data, missing_predictors, replace='missing'):
+    def Missing_Imputer(self, data, missing_predictors, replace='missing'):
         '''
         Imputes '?' character with 'missing' label
         :params: data, missing_predictors, replace
@@ -41,7 +41,7 @@ class Preprocessing:
             data[var].replace('?', replace)
         return data
     
-    def binner(self, data, binning_meta):
+    def Binner(self, data, binning_meta):
         '''
         Create bins based on variable distributions
         :params: data, var, new_var_name, bins, bins_labels
@@ -53,7 +53,7 @@ class Preprocessing:
             data.drop(var, axis=1, inplace=True)
         return data
 
-    def encoder(self, data, encoding_meta):
+    def Encoder(self, data, encoding_meta):
         '''
         Encode all variables for training
         :params: data, var, mapping
@@ -63,6 +63,7 @@ class Preprocessing:
         for var, meta in encoding_meta.items():
             if var not in data.columns.values.tolist():
                 pass
+            print(var)
             data[var] = data[var].map(encoding_meta)
         return data
 

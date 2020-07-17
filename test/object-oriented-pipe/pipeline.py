@@ -56,13 +56,13 @@ class Pipeline(Preprocessing):
         # =====================================================================================================
 
         #Step1: Arrange Data
-        self.data = Preprocessing.data_preparer(self, self.data, self.dropped_columns, self.renamed_columns)
+        self.data = Preprocessing.Data_Preparer(self, self.data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
-        self.data = Preprocessing.missing_imputer(self, self.data, self.missing_predictors, replace='missing')
+        self.data = Preprocessing.Missing_Imputer(self, self.data, self.missing_predictors, replace='missing')
         #Step3: Binning Variables
-        self.data = Preprocessing.binner(self, self.data, self.binning_meta)
+        self.data = Preprocessing.Binner(self, self.data, self.binning_meta)
         # #Step4: Encoding Variables
-        self.data = Preprocessing.encoder(self, self.data, self.encoding_meta)
+        self.data = Preprocessing.Encoder(self, self.data, self.encoding_meta)
         return self
 
 
