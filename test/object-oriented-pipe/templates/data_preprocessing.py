@@ -63,10 +63,27 @@ class Preprocessing:
         for var, meta in encoding_meta.items():
             if var not in data.columns.values.tolist():
                 pass
-            print(var)
-            data[var] = data[var].map(encoding_meta)
+            data[var] = data[var].map(meta)
         return data
 
+    def Dumminizer(self, data, columns_to_dummies, dummies_meta):
+        '''
+        Generate dummies for nominal variables
+        :params: data, columns_to_dummies, dummies_meta
+        :return: DataFrame
+        '''
+        for var in columns_to_dummies:
+            cat_names = sorted(dummies_meta[var])
+            obs_cat_names = sorted(list(set(data[var].unique())))
+            dummies = pd.get_dummies(data[var], prefix=var)
+            data = pd.concat([data, dummies], axis=1)
+            if obs_cat_names != cat_names: #exception: when label misses 
+                cat_miss_labels = ["_".join([var, cat]) for cat in cat_names if cat not in obs_cat_names] #syntetic dummy
+                for cat in cat_miss_labels:
+                    data[cat] = 0 
+            data = data.drop(var, 1)
+        return data
+            
 
     
     

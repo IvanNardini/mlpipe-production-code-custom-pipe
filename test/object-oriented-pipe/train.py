@@ -14,9 +14,12 @@ config = yaml.load(stream)
 pipeline = Pipeline(
                     dropped_columns=config['dropped_columns'],
                     renamed_columns=config['renamed_columns'],
-                    missing_predictors=config['missing_predictors'], 
+                    target=config['target'],
+                    predictors=config['target'],
+                    nominal_predictors=config['nominal_predictors'],
                     binning_meta=config['binning_meta'],
-                    encoding_meta=config['encoding_meta']
+                    encoding_meta=config['encoding_meta'],
+                    dummies_meta=config['dummies_meta']
                 )
 
 if __name__ == "__main__":
@@ -27,4 +30,4 @@ if __name__ == "__main__":
 
     df = pd.read_csv(config['paths']['data_path'])
     test = pipeline.fit(df)
-    print(test.data.fraud_reported.head(10))
+    print(test.data.head(10))
