@@ -1,3 +1,6 @@
+'''
+pipeline modules contains the pipeline object
+'''
 from templates.data_preprocessing import Preprocessing
 
 # Data Preparation
@@ -14,46 +17,56 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Pipeline(Preprocessing):   
     
-    def __init__(self, dropped_columns, renamed_columns):
+    def __init__(self, dropped_columns, renamed_columns, missing_predictors, binning_meta):
 
-        #Global Variables
+        #Data
+        self.data = None
+
+        #Global Variables (declared)
         self.dropped_columns = dropped_columns
         self.renamed_columns = renamed_columns
+        self.binning_meta = binning_meta
+
         # self.target = target
         # self.predictors = predictors
         
-        #Engineering metadata (coming from the data)
-        # self.missing_predictors = {}
-        # self.binning_meta = {}
-        # self.dummies_meta = {}
-        # self.encoding_meta = {}
+        self.numerical_predictors = []
+        self.discrete_predictors = []
+        self.continuous_predictors = []
+        self.categorical_predictors = []
+        self.ordinal_predictors = []
+        self.nominal_predictors = []
+        self.binned_variables = []
+        self.encode_variables = []
+        self.features = []
+        self.features_selected = []
 
-    #Step1: Arrange Data
-    def Prepare_Variables(self, data):
-        preparer = Preprocessing.data_preparer(self, data, self.dropped_columns, self.renamed_columns)
-        return preparer
+        #Engineering metadata (derived)
+        self.missing_predictors = []
+        self.dummies_meta = {}
+        self.encoding_meta = {}
 
-    # def data_preparer(self, data):
-    #     '''
-    #     Drop and Rename columns
-    #     :params: data, columns_to_drop
-    #     :return: DataFrame
-    #     '''
-    #     data = data.copy()
-    #     data.drop(self.dropped_columns, axis=1, inplace=True)
-    #     data.rename(columns=self.renamed_columns, inplace=True)
-    #     return data
+    #fit pipeline
+    def fit(self, data):
+
+        #MetaData
+        self.data = data
+        self.missing_predictors = [col for col in data.select_dtypes(include='object').columns if any(data[col].str.contains('?', regex=False))]
+        
+
+        # ===================================================================================================== #
+
+        #Step1: Arrange Data
+        self.data = Preprocessing.data_preparer(self, self.data, self.dropped_columns, self.renamed_columns)
+        #Step2: Impute missing
+        self.data = Preprocessing.missing_imputer(self, self.data, self.missing_predictors, replace='missing')
+        #Step3: Binning Variables
+        self.data = Preprocessing.binner(self, self.data, self.binning_meta)
+        return self
 
 
-    # # #Step2: Impute Missings
-    # # def missing_imputer(self, df, var, replace='missing'):
-    # #     '''
-    # #     Imputes '?' character with 'missing' label
-    # #     :params: data, var, replace
-    # #     :return: Series
-    # #     '''
-    # #     df = df.copy()
+    def transform(self, data):
+        pass
 
-    # #     return data[var].replace('?', replace)
-
-    
+    def predict(self, data):
+        pass

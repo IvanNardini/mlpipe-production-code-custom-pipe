@@ -1,3 +1,6 @@
+'''
+pipeline modules contains the pipeline object
+'''
 from templates.data_preprocessing import Preprocessing
 
 # Data Preparation
@@ -14,39 +17,44 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Pipeline(Preprocessing):   
     
-    def __init__(self, dropped_columns, renamed_columns):
+    def __init__(self, dropped_columns, renamed_columns, missing_predictors):
 
-        #Global Variables
+        #Data
+        self.data = None
+
+        #Global Variables (declared)
         self.dropped_columns = dropped_columns
         self.renamed_columns = renamed_columns
+        self.missing_predictors = missing_predictors
         # self.target = target
         # self.predictors = predictors
-        
-        #Engineering metadata (coming from the data)
-        # self.missing_predictors = {}
-        # self.binning_meta = {}
-        # self.dummies_meta = {}
-        # self.encoding_meta = {}
+        self.numerical_predictors = []
+        self.discrete_predictors = []
+        self.continuous_predictors = []
+        self.categorical_predictors = []
+        self.ordinal_predictors = []
+        self.nominal_predictors = []
+        self.binned_variables = []
+        self.encode_variables = []
+        self.features = []
+        self.features_selected = []
 
-    #Step1: Arrange Data
-    def Prepare_Variables(self, data):
-        preparer = Preprocessing.data_preparer(data, self.dropped_columns, self.renamed_columns)
-        return preparer
+        #Engineering metadata (derived)
+        self.binning_meta = {}
+        self.dummies_meta = {}
+        self.encoding_meta = {}
 
-    #Step2: Impute missings
-    def Impute_Missing(self, data):
-        imputer = Preprocessing.missing_imputer(data, )
+    #fit pipeline
+    def fit(self, data):
+        #Step1: Arrange Data
+        self.data = Preprocessing.data_preparer(self, data, self.dropped_columns, self.renamed_columns)
+        #Step2: Impute missing
+        self.data = Preprocessing.missing_imputer(self, data, self.missing_predictors, replace='missing')
+        return self
 
 
-    # # #Step2: Impute Missings
-    # # def missing_imputer(self, df, var, replace='missing'):
-    # #     '''
-    # #     Imputes '?' character with 'missing' label
-    # #     :params: data, var, replace
-    # #     :return: Series
-    # #     '''
-    # #     df = df.copy()
+    def transform(self, data):
+        pass
 
-    # #     return data[var].replace('?', replace)
-
-    
+    def predict(self, data):
+        pass

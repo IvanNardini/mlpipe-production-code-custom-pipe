@@ -13,7 +13,9 @@ config = yaml.load(stream)
 
 pipeline = Pipeline(
                     dropped_columns=config['dropped_columns'],
-                    renamed_columns=config['renamed_columns']
+                    renamed_columns=config['renamed_columns'],
+                    missing_predictors=config['missing_predictors'], 
+                    binning_meta=config['binning_meta']
                 )
 
 if __name__ == "__main__":
@@ -23,5 +25,5 @@ if __name__ == "__main__":
     logging.info('Training process started!')
 
     df = pd.read_csv(config['paths']['data_path'])
-    test = pipeline.Prepare_Variables(df)
-    print(test)
+    test = pipeline.fit(df)
+    print(test.data.head(20))
