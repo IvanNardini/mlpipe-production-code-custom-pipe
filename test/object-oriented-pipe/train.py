@@ -17,6 +17,7 @@ pipeline = Pipeline(
                     target=config['target'],
                     predictors=config['predictors'],
                     nominal_predictors=config['nominal_predictors'],
+                    
                     binning_meta=config['binning_meta'],
                     encoding_meta=config['encoding_meta'],
                     dummies_meta=config['dummies_meta']

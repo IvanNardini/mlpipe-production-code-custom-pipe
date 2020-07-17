@@ -58,15 +58,16 @@ class Pipeline(Preprocessing):
         self.missing_predictors = [col for col in self.data.select_dtypes(include='object').columns if any(self.data[col].str.contains('?', regex=False))]
 
         #Step1: Arrange Data
-        self.data = Preprocessing.Data_Preparer(self, self.data, self.dropped_columns, self.renamed_columns)
+        self.data = self.Data_Preparer(self.data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
-        self.data = Preprocessing.Missing_Imputer(self, self.data, self.missing_predictors, replace='missing')
+        self.data = self.Missing_Imputer(self.data, self.missing_predictors, replace='missing')
         #Step3: Binning Variables
-        self.data = Preprocessing.Binner(self, self.data, self.binning_meta)
+        self.data = self.Binner(self.data, self.binning_meta)
         #Step4: Encoding Variables
-        self.data = Preprocessing.Encoder(self, self.data, self.encoding_meta)
+        self.data = self.Encoder(self.data, self.encoding_meta)
         #Step5: Generate Dummies
-        self.data = Preprocessing.Dumminizer(self, self.data, self.nominal_predictors, self.dummies_meta)
+        self.data = self.Dumminizer(self.data, self.nominal_predictors, self.dummies_meta)
+
         return self
 
 
