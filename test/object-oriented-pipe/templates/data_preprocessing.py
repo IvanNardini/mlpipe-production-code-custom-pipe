@@ -82,6 +82,7 @@ class Preprocessing:
                 for cat in cat_miss_labels:
                     data[cat] = 0 
             data = data.drop(var, 1)
+        print('test')
         return data
             
 
