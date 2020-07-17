@@ -53,7 +53,7 @@ class Pipeline(Preprocessing):
     #fit pipeline
     def fit(self, data):
 
-        #MetaData
+        #Initialize
         self.data = data
         self.missing_predictors = [col for col in self.data.select_dtypes(include='object').columns if any(self.data[col].str.contains('?', regex=False))]
 
@@ -67,7 +67,6 @@ class Pipeline(Preprocessing):
         self.data = Preprocessing.Encoder(self, self.data, self.encoding_meta)
         #Step5: Generate Dummies
         self.data = Preprocessing.Dumminizer(self, self.data, self.nominal_predictors, self.dummies_meta)
-
         return self
 
 
