@@ -26,3 +26,14 @@ class Preprocessing():
         data.drop(dropped_columns, axis=1, inplace=True)
         data.rename(columns=renamed_columns, inplace=True)
         return data
+
+    def missing_imputer(self, data, var, replace='missing'):
+        '''
+        Imputes '?' character with 'missing' label
+        :params: data, var, replace
+        :return: Series
+        '''
+        data = data.copy()
+        data[var].replace('?', replace)
+        return data
+    

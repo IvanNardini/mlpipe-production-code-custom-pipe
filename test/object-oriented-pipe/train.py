@@ -23,4 +23,5 @@ if __name__ == "__main__":
     logging.info('Training process started!')
 
     df = pd.read_csv(config['paths']['data_path'])
-    test = pipeline.data_preparer(df)
+    test = pipeline.Prepare_Variables(df)
+    print(test)

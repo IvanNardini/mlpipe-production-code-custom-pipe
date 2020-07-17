@@ -1,4 +1,4 @@
-from templates import data_preprocessing as dp
+from templates.data_preprocessing import Preprocessing
 
 # Data Preparation
 import pandas as pd
@@ -12,7 +12,7 @@ import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 
-class Pipeline():   
+class Pipeline(Preprocessing):   
     
     def __init__(self, dropped_columns, renamed_columns):
 
@@ -28,29 +28,25 @@ class Pipeline():
         # self.dummies_meta = {}
         # self.encoding_meta = {}
 
-    
     #Step1: Arrange Data
-    def data_preparer(self, data):
-        '''
-        Drop and Rename columns
-        :params: data, columns_to_drop
-        :return: DataFrame
-        '''
-        data = data.copy()
-        data.drop(self.dropped_columns, axis=1, inplace=True)
-        data.rename(columns=self.renamed_columns, inplace=True)
-        return data
+    def Prepare_Variables(self, data):
+        preparer = Preprocessing.data_preparer(data, self.dropped_columns, self.renamed_columns)
+        return preparer
+
+    #Step2: Impute missings
+    def Impute_Missing(self, data):
+        imputer = Preprocessing.missing_imputer(data, )
 
 
-    # #Step2: Impute Missings
-    # def missing_imputer(self, df, var, replace='missing'):
-    #     '''
-    #     Imputes '?' character with 'missing' label
-    #     :params: data, var, replace
-    #     :return: Series
-    #     '''
-    #     df = df.copy()
+    # # #Step2: Impute Missings
+    # # def missing_imputer(self, df, var, replace='missing'):
+    # #     '''
+    # #     Imputes '?' character with 'missing' label
+    # #     :params: data, var, replace
+    # #     :return: Series
+    # #     '''
+    # #     df = df.copy()
 
-    #     return data[var].replace('?', replace)
+    # #     return data[var].replace('?', replace)
 
     
