@@ -2,6 +2,7 @@
 pipeline modules contains the pipeline object
 '''
 from templates.data_preprocessing import Preprocessing
+from templates.modelling import Model
 
 # Data Preparation
 import pandas as pd
@@ -19,9 +20,9 @@ import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 
-class Pipeline(Preprocessing):   
+class Pipeline(Preprocessing, Model):   
     
-    def __init__(self, dropped_columns, renamed_columns, target, nominal_predictors, features, features_selected, binning_meta, encoding_meta, dummies_meta):
+    def __init__(self, dropped_columns, renamed_columns, target, nominal_predictors, features, features_selected, binning_meta, encoding_meta, dummies_meta, test_size):
 
         ##Data
         self.data = None
@@ -45,9 +46,8 @@ class Pipeline(Preprocessing):
 
         ##Engineering metadata
         self.missing_predictors = []
-        self.balance_random_state = 9
-        self.test_size = 0.1
-        self.sample_random_state = 0
+        self.random_state = 0
+        self.test_size = test_size
 
     # =====================================================================================================
 
@@ -70,11 +70,14 @@ class Pipeline(Preprocessing):
         #Step6: Scale Features
         self.data = self.Scaler(self.data, self.features)
         #Step7: Balancing
-        self.X, self.y = self.Balancer(self.data, self.features_selected, self.target, self.balance_random_state)
+        self.X, self.y = self.Balancer(self.data, self.features_selected, self.target, self.random_state)
         #Step8: Split for training
         self.X_train, self.X_test, self.y_train, self.y_test = self.Data_Splitter(self.X, self.y,
                                                                                   test_size = self.test_size,
-                                                                                  random_state = self.sample_random_state)
+                                                                                  random_state = self.random_state)
+        #Step9: Model Fit 
+        self.model.fit(self.X_train, self.y_train)
+
         return self
 
 
@@ -83,3 +86,7 @@ class Pipeline(Preprocessing):
 
     def predict(self, data):
         pass
+
+    def evaluate(self, data):
+        pass
+    
