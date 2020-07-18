@@ -37,5 +37,8 @@ if __name__ == "__main__":
     print("Model Assessment".center(20, '*'))
     print("*"*20)
     pipeline.evaluate()
+    print("*"*20)
+    print("Model Predictions".center(20, '*'))
+    print("*"*20)
     predictions = pipeline.predict(df)
     print(predictions)
