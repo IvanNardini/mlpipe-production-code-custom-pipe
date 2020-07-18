@@ -92,17 +92,17 @@ class Pipeline(Preprocessing, Model):
     def transform(self, data):
 
         #Step1: Arrange Data
-        data = Data_Preparer(data, self.dropped_columns, self.renamed_columns)
+        data = self.Data_Preparer(data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
-        data = Missing_Imputer(data, self.missing_predictors, replace='missing')
+        data = self.Missing_Imputer(data, self.missing_predictors, replace='missing')
         #Step3: Binning Variables
-        data = Binner(data, self.binning_meta)
+        data = self.Binner(data, self.binning_meta)
         #Step4: Encoding Variables
-        data = Encoder(data, self.encoding_meta)
+        data = self.Encoder(data, self.encoding_meta)
         #Step5: Generate Dummies
-        data = Dumminizer(data, self.nominal_predictors, self.dummies_meta)
+        data = self.Dumminizer(data, self.nominal_predictors, self.dummies_meta)
         #Step6: Scale Features
-        data = Scaler(data, self.features)
+        data = self.Scaler(data, self.features)
 
         return data
 
