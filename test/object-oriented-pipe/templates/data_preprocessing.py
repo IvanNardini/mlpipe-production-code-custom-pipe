@@ -20,7 +20,8 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Preprocessing:
 
-    def Data_Preparer(self, data, dropped_columns, renamed_columns):
+    @staticmethod
+    def Data_Preparer(data, dropped_columns, renamed_columns):
         '''
         Drop and Rename columns
         :params: data, columns_to_drop
@@ -31,7 +32,8 @@ class Preprocessing:
         data.rename(columns=renamed_columns, inplace=True)
         return data
 
-    def Missing_Imputer(self, data, missing_predictors, replace='missing'):
+    @staticmethod
+    def Missing_Imputer(data, missing_predictors, replace='missing'):
         '''
         Imputes '?' character with 'missing' label
         :params: data, missing_predictors, replace
@@ -42,7 +44,8 @@ class Preprocessing:
             data[var] = data[var].replace('?', replace)
         return data
 
-    def Binner(self, data, binning_meta):
+    @staticmethod
+    def Binner(data, binning_meta):
         '''
         Create bins based on variable distributions
         :params: data, var, new_var_name, bins, bins_labels
@@ -54,7 +57,8 @@ class Preprocessing:
             data.drop(var, axis=1, inplace=True)
         return data
 
-    def Encoder(self, data, encoding_meta):
+    @staticmethod
+    def Encoder(data, encoding_meta):
         '''
         Encode all variables for training
         :params: data, var, mapping
@@ -67,7 +71,8 @@ class Preprocessing:
             data[var] = data[var].map(meta)
         return data
 
-    def Dumminizer(self, data, columns_to_dummies, dummies_meta):
+    @staticmethod
+    def Dumminizer(data, columns_to_dummies, dummies_meta):
         '''
         Generate dummies for nominal variables
         :params: data, columns_to_dummies, dummies_meta
@@ -86,7 +91,8 @@ class Preprocessing:
             data = data.drop(var, 1)
         return data
 
-    def Scaler(self, data, columns_to_scale):
+    @staticmethod
+    def Scaler(data, columns_to_scale):
         '''
         Scale variables
         :params:  data, columns_to_scale
@@ -98,15 +104,17 @@ class Preprocessing:
         data[columns_to_scale] = scaler.transform(data[columns_to_scale])
         return data
 
-    def Balancer(self, data, features_selected, target, random_state):
+    @staticmethod
+    def Balancer(data, features_selected, target, random_state):
         '''
         '''
         data = data.copy()
         smote = SMOTE(random_state=random_state)
         X, y = smote.fit_resample(data[features_selected], data[target])
         return X, y
-    
-    def Data_Splitter(self, X, y, test_size, random_state):
+
+    @staticmethod
+    def Data_Splitter(X, y, test_size, random_state):
         '''
         Split data in train and test samples
         :params: X, y
@@ -118,9 +126,4 @@ class Preprocessing:
                                                             test_size=test_size,
                                                             random_state=random_state)
         return X_train, X_test, y_train, y_test
-
-   
-            
-
-    
     

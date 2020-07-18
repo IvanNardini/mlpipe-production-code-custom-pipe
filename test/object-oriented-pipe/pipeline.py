@@ -51,6 +51,7 @@ class Pipeline(Preprocessing, Model, PostProcessing):
     # =====================================================================================================
 
     #fit pipeline
+
     def fit(self, data):
 
         #Initialize
