@@ -4,14 +4,6 @@ pipeline modules contains the pipeline object
 from templates.data_preprocessing import Preprocessing
 from templates.modelling import Model
 
-# Data Preparation
-import pandas as pd
-import numpy as np
-
-#Feature enginnering
-from sklearn.preprocessing import MinMaxScaler
-from imblearn.over_sampling import SMOTE
-
 #Utils
 import logging
 import joblib
@@ -119,7 +111,7 @@ class Pipeline(Preprocessing, Model):
         score_train = round(self.model.score(self.X_train, self.y_train), 2)
         classification_train = classification_report(self.y_train, predictions_train)
         print()
-        print('score: {}'.format(score_train)
+        print('score: {}'.format(score_train))
         print()
         print('Classification report - Training')
         print(classification_train)
@@ -129,7 +121,7 @@ class Pipeline(Preprocessing, Model):
         score_test = round(self.model.score(self.X_test, self.y_test), 2)
         classification_train = classification_report(self.y_test, predictions_test)
         print()
-        print('score: {}'.format(score_test)
+        print('score: {}'.format(score_test))
         print()
         print('Classification report - Test')
         print(classification_test)
