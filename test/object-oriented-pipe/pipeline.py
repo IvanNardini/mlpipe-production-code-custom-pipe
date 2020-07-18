@@ -43,9 +43,6 @@ class Pipeline(Preprocessing):
         self.encoding_meta = encoding_meta
         self.dummies_meta = dummies_meta
 
-        #Declared Model
-        self.balancer = SMOTE(random_state=9)
-
         ##Engineering metadata (derived)
         self.missing_predictors = []
 
@@ -67,8 +64,9 @@ class Pipeline(Preprocessing):
         self.data = self.Encoder(self.data, self.encoding_meta)
         #Step5: Generate Dummies
         self.data = self.Dumminizer(self.data, self.nominal_predictors, self.dummies_meta)
-        #Step6: Feature Engineering
+        #Step6: Scale Features
         self.data = self.Scaler(self.data, self.features)
+        #Step7: Balancing
         self.X, self.y = self.Balancer(self.data, self.features_selected, self.target)
         return self
 
