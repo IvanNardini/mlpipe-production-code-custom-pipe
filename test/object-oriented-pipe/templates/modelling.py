@@ -5,9 +5,9 @@ import pandas as pd
 #Model
 from sklearn.ensemble import RandomForestClassifier
 
-class Model():
+class Model:
 
-    def Model_RFor(self, max_depth, min_samples_split, n_estimators):
+    def RFor(self, max_depth, min_samples_split, n_estimators):
         '''
         Train the model and store it
         :params: X_train, y_train, output_path

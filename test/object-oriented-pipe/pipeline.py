@@ -82,7 +82,7 @@ class Pipeline(Preprocessing, Model):
                                                                                   test_size = self.test_size,
                                                                                   random_state = self.random_state)
         #Step9: Model Fit 
-        self.model = self.Model_Rfor(max_depth=self.max_depth, 
+        self.model = self.RFor(max_depth=self.max_depth, 
                         min_samples_split=self.min_samples_split, 
                         n_estimators=n_estimators)
         self.model.fit(self.X_train, self.y_train)
