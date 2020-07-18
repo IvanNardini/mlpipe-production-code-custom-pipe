@@ -1,4 +1,4 @@
-# Data Preparation
+# Data Science 
 import numpy as np
 import pandas as pd
 
@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 class Model():
 
-    def Model(self):
+    def Model_RFor(self):
         '''
         Train the model and store it
         :params: X_train, y_train, output_path
