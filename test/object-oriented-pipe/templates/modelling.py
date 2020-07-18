@@ -7,15 +7,15 @@ from sklearn.ensemble import RandomForestClassifier
 
 class Model():
 
-    def Model_RFor(self):
+    def Model_RFor(self, max_depth, min_samples_split, n_estimators):
         '''
         Train the model and store it
         :params: X_train, y_train, output_path
         :return: None
         '''
         # initialise the model
-        rfor = RandomForestClassifier(max_depth=25, 
-                                    min_samples_split=5, 
-                                    n_estimators=300,
+        rfor = RandomForestClassifier(max_depth=max_depth, 
+                                    min_samples_split=min_samples_split, 
+                                    n_estimators=n_estimators,
                                     random_state=9)
         return rfor

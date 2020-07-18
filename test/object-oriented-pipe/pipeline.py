@@ -48,6 +48,12 @@ class Pipeline(Preprocessing, Model):
         self.missing_predictors = []
         self.random_state = 0
         self.test_size = test_size
+        self.max_depth = 25
+        self.min_samples_split = 5
+        self.n_estimators= 300
+
+        #Model
+        self.model = None
 
     # =====================================================================================================
 
@@ -76,7 +82,10 @@ class Pipeline(Preprocessing, Model):
                                                                                   test_size = self.test_size,
                                                                                   random_state = self.random_state)
         #Step9: Model Fit 
-        self.Model_RFor.fit(self.X_train, self.y_train)
+        self.model = self.Model_Rfor(max_depth=self.max_depth, 
+                        min_samples_split=self.min_samples_split, 
+                        n_estimators=n_estimators)
+        self.model.fit(self.X_train, self.y_train)
 
         return self
 
