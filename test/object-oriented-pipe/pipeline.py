@@ -103,7 +103,8 @@ class Pipeline(Preprocessing, Model):
         data = self.Dumminizer(data, self.nominal_predictors, self.dummies_meta)
         #Step6: Scale Features
         data = self.Scaler(data, self.features)
-        return data[self.features]
+        data = data[self.features_selected]
+        return data
 
     def predict(self, data):
         #Step1: Engineer the data
@@ -112,5 +113,23 @@ class Pipeline(Preprocessing, Model):
         predictions = self.model.predict(data)
         return predictions
 
-    def evaluate(self, data):
-        pass
+    def evaluate(self):
+        #Evaluate Train Sample
+        predictions_train = self.model.predict(self.X_train)
+        score_train = round(self.model.score(self.X_train, self.y_train), 2)
+        classification_train = classification_report(self.y_train, predictions_train)
+        print()
+        print('score: {}'.format(score_train)
+        print()
+        print('Classification report - Training')
+        print(classification_train)
+
+        #Evaluate Test Sample
+        predictions_test = self.model.predict(self.X_test)
+        score_test = round(self.model.score(self.X_test, self.y_test), 2)
+        classification_train = classification_report(self.y_test, predictions_test)
+        print()
+        print('score: {}'.format(score_test)
+        print()
+        print('Classification report - Test')
+        print(classification_test)

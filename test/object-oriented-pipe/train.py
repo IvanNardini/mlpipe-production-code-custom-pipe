@@ -33,4 +33,9 @@ if __name__ == "__main__":
 
     df = pd.read_csv(config['paths']['data_path'])
     pipeline.fit(df)
-    print(pipeline.predict(df))
+    print("*"*20)
+    print("Model Assessment".center(20, '*'))
+    print("*"*20)
+    pipeline.evaluate()
+    predictions = pipeline.predict(df)
+    print(predictions)
