@@ -43,8 +43,11 @@ class Pipeline(Preprocessing):
         self.encoding_meta = encoding_meta
         self.dummies_meta = dummies_meta
 
-        ##Engineering metadata (derived)
+        ##Engineering metadata
         self.missing_predictors = []
+        self.balance_random_state = 9
+        self.test_size = 0.1
+        self.sample_random_state = 0
 
     # =====================================================================================================
 
@@ -67,7 +70,11 @@ class Pipeline(Preprocessing):
         #Step6: Scale Features
         self.data = self.Scaler(self.data, self.features)
         #Step7: Balancing
-        self.X, self.y = self.Balancer(self.data, self.features_selected, self.target)
+        self.X, self.y = self.Balancer(self.data, self.features_selected, self.target, self.balance_random_state)
+        #Step8: Split for training
+        self.X_train, self.X_test, self.y_train, self.y_test = self.Data_Splitter(self.X, self.y,
+                                                                                  test_size = self.test_size,
+                                                                                  random_state = self.sample_random_state)
         return self
 
 

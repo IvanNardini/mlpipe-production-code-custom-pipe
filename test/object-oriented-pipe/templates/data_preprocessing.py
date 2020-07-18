@@ -97,13 +97,26 @@ class Preprocessing:
         data[columns_to_scale] = scaler.transform(data[columns_to_scale])
         return data
 
-    def Balancer(self, data, features_selected, target):
+    def Balancer(self, data, features_selected, target, random_state):
         '''
         '''
         data = data.copy()
-        smote = SMOTE(random_state=9)
+        smote = SMOTE(random_state=random_state)
         X, y = smote.fit_resample(data[features_selected], data[target])
-        return X, y 
+        return X, y
+    
+    def Data_Splitter(self, X, y, test_size, random_state):
+        '''
+        Split data in train and test samples
+        :params: X, y
+        :return: X_train, X_test, y_train, y_test
+        '''
+        
+        X_train, X_test, y_train, y_test = train_test_split(X,
+                                                            y,
+                                                            test_size=test_size,
+                                                            random_state=random_state)
+        return X_train, X_test, y_train, y_test
 
    
             

@@ -1,47 +1,4 @@
-   
-def scaler_trainer(data, output_path):
-    '''
-    Fit the scaler on predictors
-    :params: data, output_path
-    :return: scaler
-    '''
-    
-    scaler = MinMaxScaler()
-    scaler.fit(data)
-    joblib.dump(scaler, output_path)
-    return scaler
-  
-def scaler_trasformer(data, scaler):
-    '''
-    Trasform the data 
-    :params: data, scaler
-    :return: DataFrame
-    '''
-    scaler = joblib.load(scaler) 
-    return scaler.transform(data)
 
-def balancer(data, features_selected, target):
-    '''
-    Balance data with SMOTE
-    :params: data
-    : X, y
-    '''
-    smote = SMOTE(random_state=9)
-    X, y = smote.fit_resample(data[features_selected], data[target])
-    return X,y
-
-def data_splitter(X, y):
-    '''
-    Split data in train and test samples
-    :params: X, y
-    :return: X_train, X_test, y_train, y_test
-    '''
-    
-    X_train, X_test, y_train, y_test = train_test_split(X,
-                                                        y,
-                                                        test_size=0.1,
-                                                        random_state=0)
-    return X_train, X_test, y_train, y_test
 
 
 
