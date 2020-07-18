@@ -15,6 +15,7 @@ pipeline = Pipeline(
                     dropped_columns=config['dropped_columns'],
                     renamed_columns=config['renamed_columns'],
                     target=config['target'],
+                    missing_predictors=config['missing_predictors'],
                     nominal_predictors=config['nominal_predictors'],
                     features=config['features'], 
                     features_selected=config['features_selected'],
@@ -31,5 +32,5 @@ if __name__ == "__main__":
     logging.info('Training process started!')
 
     df = pd.read_csv(config['paths']['data_path'])
-    test = pipeline.fit(df)
-    print(test.model)
+    pipeline.fit(df)
+    print(pipeline.predict(df))
