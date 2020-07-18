@@ -16,7 +16,7 @@ class PostProcessing:
         #Evaluate Test Sample
         predictions_test = model.predict(X_test)
         score_test = round(model.score(X_test, y_test), 2)
-        classification_train = classification_report(y_test, predictions_test)
+        classification_test = classification_report(y_test, predictions_test)
         print()
         print('score: {}'.format(score_test))
         print()
