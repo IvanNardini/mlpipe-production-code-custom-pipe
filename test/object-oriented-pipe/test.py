@@ -10,10 +10,6 @@ import ruamel.yaml as yaml
 import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
-# Read configuration
-stream = open('config.yaml', 'r')
-config = yaml.load(stream)
-
 pipeline = Pipeline(
                     dropped_columns=config['dropped_columns'],
                     renamed_columns=config['renamed_columns'],
@@ -30,12 +26,17 @@ pipeline = Pipeline(
 
 if __name__ == "__main__":
 
-    import logging
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p', level=logging.INFO)
-    logging.info('Training process started!')
 
+    # Read configuration
+    stream = open('config.yaml', 'r')
+    config = yaml.load(stream)
+    
+    logging.info('Training process started!')
     df = pd.read_csv(config['paths']['data_path'])
     pipeline.fit(df)
+    logging.info('Training process successfully completed!')
+    
     print("*"*20)
     print("Model Assessment".center(20, '*'))
     print("*"*20)
@@ -43,5 +44,9 @@ if __name__ == "__main__":
     print("*"*20)
     print("Model Predictions".center(20, '*'))
     print("*"*20)
+
+    logging.info('Scoring process started!')
     predictions = pipeline.predict(df)
-    print(predictions)
+    logging.info('Scoring process successfully completed!')
+
+    print('First 20 prediticions are: {}'.format(predictions[:10]))
