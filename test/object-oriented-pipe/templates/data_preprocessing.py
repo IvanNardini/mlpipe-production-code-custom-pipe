@@ -38,9 +38,9 @@ class Preprocessing:
         '''
         data = data.copy()
         for var in missing_predictors:
-            data[var].replace('?', replace)
+            data[var] = data[var].replace('?', replace)
         return data
-    
+
     def Binner(self, data, binning_meta):
         '''
         Create bins based on variable distributions
@@ -72,6 +72,7 @@ class Preprocessing:
         :params: data, columns_to_dummies, dummies_meta
         :return: DataFrame
         '''
+        data = data.copy()
         for var in columns_to_dummies:
             cat_names = sorted(dummies_meta[var])
             obs_cat_names = sorted(list(set(data[var].unique())))
@@ -83,6 +84,20 @@ class Preprocessing:
                     data[cat] = 0 
             data = data.drop(var, 1)
         return data
+
+    def Scaler(self, data, columns_to_scale):
+        '''
+        Scale variables
+        :params:  data, columns_to_scale
+        :return: DataFrame
+        '''
+        data = data.copy()
+        scaler = MinMaxScaler()
+        scaler.fit(data[columns_to_scale])
+        data[columns_to_scale] = scaler.transform(data[columns_to_scale])
+        return data
+
+   
             
 
     

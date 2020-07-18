@@ -7,6 +7,10 @@ from templates.data_preprocessing import Preprocessing
 import pandas as pd
 import numpy as np
 
+#Feature enginnering
+from sklearn.preprocessing import MinMaxScaler
+from imblearn.over_sampling import SMOTE
+
 #Utils
 import logging
 import joblib
@@ -17,33 +21,30 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Pipeline(Preprocessing):   
     
-    def __init__(self, dropped_columns, renamed_columns, target, predictors, nominal_predictors, binning_meta, encoding_meta, dummies_meta):
-
-        #Metadata
+    def __init__(self, dropped_columns, renamed_columns, target, nominal_predictors, features, features_selected, binning_meta, encoding_meta, dummies_meta):
 
         ##Data
         self.data = None
+        self.X = None
+        self.y = None
+        self.X_train = None
+        self.X_test = None
+        self.y_train = None
+        self.y_test = None
 
         ##Declared Variables
         self.dropped_columns = dropped_columns
         self.renamed_columns = renamed_columns
         self.target = target
-        self.predictors = predictors
         self.nominal_predictors = nominal_predictors
+        self.features = features
+        self.features_selected = features_selected
         self.binning_meta = binning_meta
         self.encoding_meta = encoding_meta
         self.dummies_meta = dummies_meta
 
-        self.numerical_predictors = []
-        self.discrete_predictors = []
-        self.continuous_predictors = []
-        self.categorical_predictors = []
-        self.ordinal_predictors = []
-        self.nominal_predictors = []
-        self.binned_variables = []
-        self.encode_variables = []
-        self.features = []
-        self.features_selected = []
+        #Declared Model
+        self.balancer = SMOTE(random_state=9)
 
         ##Engineering metadata (derived)
         self.missing_predictors = []
@@ -56,7 +57,6 @@ class Pipeline(Preprocessing):
         #Initialize
         self.data = data
         self.missing_predictors = [col for col in self.data.select_dtypes(include='object').columns if any(self.data[col].str.contains('?', regex=False))]
-
         #Step1: Arrange Data
         self.data = self.Data_Preparer(self.data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
@@ -67,7 +67,12 @@ class Pipeline(Preprocessing):
         self.data = self.Encoder(self.data, self.encoding_meta)
         #Step5: Generate Dummies
         self.data = self.Dumminizer(self.data, self.nominal_predictors, self.dummies_meta)
-
+        #Step6: Feature Engineering
+        self.data = self.Scaler(self.data, self.features)
+        
+        # self.scaler.fit(self.data[self.features])
+        # self.data[self.features] = self.scaler.transform(self.data[self.features])
+        # self.X, self.y = self.balancer.fit_resample(self.data[self.features_selected], data[self.target])
         return self
 
 
