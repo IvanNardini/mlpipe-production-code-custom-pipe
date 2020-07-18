@@ -90,7 +90,7 @@ class Pipeline(Preprocessing, Model):
 
     #transform
     def transform(self, data):
-
+        data = data.copy()
         #Step1: Arrange Data
         data = self.Data_Preparer(data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
@@ -103,8 +103,7 @@ class Pipeline(Preprocessing, Model):
         data = self.Dumminizer(data, self.nominal_predictors, self.dummies_meta)
         #Step6: Scale Features
         data = self.Scaler(data, self.features)
-
-        return data
+        return data[self.features]
 
     def predict(self, data):
         #Step1: Engineer the data
