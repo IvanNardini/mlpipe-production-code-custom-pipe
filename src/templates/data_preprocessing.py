@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 
 #Utils
 import logging
@@ -38,9 +39,9 @@ class Preprocessing:
         '''
         data = data.copy()
         for var in missing_predictors:
-            data[var].replace('?', replace)
+            data[var] = data[var].replace('?', replace)
         return data
-    
+
     def Binner(self, data, binning_meta):
         '''
         Create bins based on variable distributions
@@ -63,9 +64,63 @@ class Preprocessing:
         for var, meta in encoding_meta.items():
             if var not in data.columns.values.tolist():
                 pass
-            data[var] = data[var].map(encoding_meta)
+            data[var] = data[var].map(meta)
         return data
 
+    def Dumminizer(self, data, columns_to_dummies, dummies_meta):
+        '''
+        Generate dummies for nominal variables
+        :params: data, columns_to_dummies, dummies_meta
+        :return: DataFrame
+        '''
+        data = data.copy()
+        for var in columns_to_dummies:
+            cat_names = sorted(dummies_meta[var])
+            obs_cat_names = sorted(list(set(data[var].unique())))
+            dummies = pd.get_dummies(data[var], prefix=var)
+            data = pd.concat([data, dummies], axis=1)
+            if obs_cat_names != cat_names: #exception: when label misses 
+                cat_miss_labels = ["_".join([var, cat]) for cat in cat_names if cat not in obs_cat_names] #syntetic dummy
+                for cat in cat_miss_labels:
+                    data[cat] = 0 
+            data = data.drop(var, 1)
+        return data
+
+    def Scaler(self, data, columns_to_scale):
+        '''
+        Scale variables
+        :params:  data, columns_to_scale
+        :return: DataFrame
+        '''
+        data = data.copy()
+        scaler = MinMaxScaler()
+        scaler.fit(data[columns_to_scale])
+        data[columns_to_scale] = scaler.transform(data[columns_to_scale])
+        return data
+
+    def Balancer(self, data, features_selected, target, random_state):
+        '''
+        '''
+        data = data.copy()
+        smote = SMOTE(random_state=random_state)
+        X, y = smote.fit_resample(data[features_selected], data[target])
+        return X, y
+    
+    def Data_Splitter(self, X, y, test_size, random_state):
+        '''
+        Split data in train and test samples
+        :params: X, y
+        :return: X_train, X_test, y_train, y_test
+        '''
+        
+        X_train, X_test, y_train, y_test = train_test_split(X,
+                                                            y,
+                                                            test_size=test_size,
+                                                            random_state=random_state)
+        return X_train, X_test, y_train, y_test
+
+   
+            
 
     
     
