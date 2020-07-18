@@ -20,7 +20,8 @@ pipeline = Pipeline(
                     features_selected=config['features_selected'],
                     binning_meta=config['binning_meta'],
                     encoding_meta=config['encoding_meta'],
-                    dummies_meta=config['dummies_meta']
+                    dummies_meta=config['dummies_meta'],
+                    test_size=0.1
                     )
 
 if __name__ == "__main__":
