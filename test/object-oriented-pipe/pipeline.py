@@ -69,10 +69,7 @@ class Pipeline(Preprocessing):
         self.data = self.Dumminizer(self.data, self.nominal_predictors, self.dummies_meta)
         #Step6: Feature Engineering
         self.data = self.Scaler(self.data, self.features)
-        
-        # self.scaler.fit(self.data[self.features])
-        # self.data[self.features] = self.scaler.transform(self.data[self.features])
-        # self.X, self.y = self.balancer.fit_resample(self.data[self.features_selected], data[self.target])
+        self.X, self.y = self.Balancer(self.data, self.features_selected, self.target)
         return self
 
 

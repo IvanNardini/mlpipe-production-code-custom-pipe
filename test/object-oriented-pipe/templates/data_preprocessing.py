@@ -97,6 +97,13 @@ class Preprocessing:
         data[columns_to_scale] = scaler.transform(data[columns_to_scale])
         return data
 
+    def Balancer(self, data, feature_selected, target):
+        '''
+        '''
+        data = data.copy()
+        X, y = SMOTE.fit_resample(data[features_selected], data[target])
+        return X, y 
+
    
             
 
