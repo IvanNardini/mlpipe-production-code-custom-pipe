@@ -22,7 +22,7 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Pipeline(Preprocessing, Model):   
     
-    def __init__(self, dropped_columns, renamed_columns, target, nominal_predictors, features, features_selected, binning_meta, encoding_meta, dummies_meta, test_size):
+    def __init__(self, dropped_columns, renamed_columns, target, missing_predictors, nominal_predictors, features, features_selected, binning_meta, encoding_meta, dummies_meta, test_size):
 
         ##Data
         self.data = None
@@ -37,6 +37,7 @@ class Pipeline(Preprocessing, Model):
         self.dropped_columns = dropped_columns
         self.renamed_columns = renamed_columns
         self.target = target
+        self.missing_predictors = missing_predictors
         self.nominal_predictors = nominal_predictors
         self.features = features
         self.features_selected = features_selected
@@ -45,7 +46,6 @@ class Pipeline(Preprocessing, Model):
         self.dummies_meta = dummies_meta
 
         ##Engineering metadata
-        self.missing_predictors = []
         self.random_state = 0
         self.test_size = test_size
         self.max_depth = 25
@@ -62,7 +62,6 @@ class Pipeline(Preprocessing, Model):
 
         #Initialize
         self.data = data
-        self.missing_predictors = [col for col in self.data.select_dtypes(include='object').columns if any(self.data[col].str.contains('?', regex=False))]
         #Step1: Arrange Data
         self.data = self.Data_Preparer(self.data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
@@ -84,17 +83,35 @@ class Pipeline(Preprocessing, Model):
         #Step9: Model Fit 
         self.model = self.RFor(max_depth=self.max_depth, 
                         min_samples_split=self.min_samples_split, 
-                        n_estimators=n_estimators)
+                        n_estimators=self.n_estimators)
         self.model.fit(self.X_train, self.y_train)
 
         return self
 
-
+    #transform
     def transform(self, data):
-        pass
+
+        #Step1: Arrange Data
+        data = Data_Preparer(data, self.dropped_columns, self.renamed_columns)
+        #Step2: Impute missing
+        data = Missing_Imputer(data, self.missing_predictors, replace='missing')
+        #Step3: Binning Variables
+        data = Binner(data, self.binning_meta)
+        #Step4: Encoding Variables
+        data = Encoder(data, self.encoding_meta)
+        #Step5: Generate Dummies
+        data = Dumminizer(data, self.nominal_predictors, self.dummies_meta)
+        #Step6: Scale Features
+        data = Scaler(data, self.features)
+
+        return data
 
     def predict(self, data):
-        pass
+        #Step1: Engineer the data
+        data = self.transform(data)
+        #Step2: Predict
+        predictions = self.model.predict(data)
+        return predictions
 
     def evaluate(self, data):
         pass

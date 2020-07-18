@@ -32,4 +32,4 @@ if __name__ == "__main__":
 
     df = pd.read_csv(config['paths']['data_path'])
     test = pipeline.fit(df)
-    print(test.Model)
+    print(test.model)
