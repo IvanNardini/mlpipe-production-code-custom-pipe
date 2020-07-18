@@ -3,6 +3,7 @@ pipeline modules contains the pipeline object
 '''
 from templates.data_preprocessing import Preprocessing
 from templates.modelling import Model
+from templates.postprocessing import PostProcessing
 
 #Utils
 import logging
@@ -12,7 +13,7 @@ import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 
-class Pipeline(Preprocessing, Model):   
+class Pipeline(Preprocessing, Model, PostProcessing):   
     
     def __init__(self, dropped_columns, renamed_columns, target, missing_predictors, nominal_predictors, features, features_selected, binning_meta, encoding_meta, dummies_meta, test_size):
 
@@ -106,22 +107,5 @@ class Pipeline(Preprocessing, Model):
         return predictions
 
     def evaluate(self):
-        #Evaluate Train Sample
-        predictions_train = self.model.predict(self.X_train)
-        score_train = round(self.model.score(self.X_train, self.y_train), 2)
-        classification_train = classification_report(self.y_train, predictions_train)
-        print()
-        print('score: {}'.format(score_train))
-        print()
-        print('Classification report - Training')
-        print(classification_train)
-
-        #Evaluate Test Sample
-        predictions_test = self.model.predict(self.X_test)
-        score_test = round(self.model.score(self.X_test, self.y_test), 2)
-        classification_train = classification_report(self.y_test, predictions_test)
-        print()
-        print('score: {}'.format(score_test))
-        print()
-        print('Classification report - Test')
-        print(classification_test)
+        self.evaluate_classification(self.model, self.X_train, self.y_train, 
+                                     self.X_test, self.y_test)

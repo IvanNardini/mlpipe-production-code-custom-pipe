@@ -1,3 +1,6 @@
+#Read Data
+import pandas as pd
+
 #Pipeline
 from pipeline import *
 
