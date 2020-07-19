@@ -51,13 +51,12 @@ class Pipeline(Preprocessing, Model, PostProcessing):
     # =====================================================================================================
 
     #fit pipeline
-
     def fit(self, data):
 
         #Initialize
-        self.data = data
+        cls.data = data
         #Step1: Arrange Data
-        self.data = self.Data_Preparer(self.data, self.dropped_columns, self.renamed_columns)
+        cls.data = self.Data_Preparer(self.data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
         self.data = self.Missing_Imputer(self.data, self.missing_predictors, replace='missing')
         #Step3: Binning Variables
