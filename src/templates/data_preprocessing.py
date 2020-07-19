@@ -105,7 +105,7 @@ class Preprocessing:
         smote = SMOTE(random_state=random_state)
         X, y = smote.fit_resample(data[features_selected], data[target])
         return X, y
-    
+        
     def Data_Splitter(self, X, y, test_size, random_state):
         '''
         Split data in train and test samples
@@ -118,9 +118,4 @@ class Preprocessing:
                                                             test_size=test_size,
                                                             random_state=random_state)
         return X_train, X_test, y_train, y_test
-
-   
-            
-
-    
     

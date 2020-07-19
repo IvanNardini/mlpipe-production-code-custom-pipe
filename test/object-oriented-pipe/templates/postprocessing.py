@@ -2,8 +2,7 @@ from sklearn.metrics import classification_report
 
 class PostProcessing:
 
-    @staticmethod
-    def evaluate_classification(model, X_train, y_train, X_test, y_test):
+    def evaluate_classification(self, model, X_train, y_train, X_test, y_test):
         #Evaluate Train Sample
         # predictions_train = model.predict(X_train)
         # score_train = round(model.score(X_train, y_train), 2)

@@ -2,7 +2,7 @@
 pipeline modules contains the pipeline object
 '''
 from templates.data_preprocessing import Preprocessing
-from templates.modelling import Model
+from templates.modelling import Models
 from templates.postprocessing import PostProcessing
 
 #Utils
@@ -13,7 +13,7 @@ import warnings
 warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 
-class Pipeline(Preprocessing, Model, PostProcessing):   
+class Pipeline():   
     
     def __init__(self, dropped_columns, renamed_columns, target, missing_predictors, nominal_predictors, features, features_selected, binning_meta, encoding_meta, dummies_meta, test_size):
 
@@ -56,56 +56,58 @@ class Pipeline(Preprocessing, Model, PostProcessing):
         #Initialize
         self.data = data
         #Step1: Arrange Data
-        self.data = self.Data_Preparer(self.data, self.dropped_columns, self.renamed_columns)
+        self.data = Preprocessing.Data_Preparer(self, self.data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
-        self.data = self.Missing_Imputer(self.data, self.missing_predictors, replace='missing')
+        self.data = Preprocessing.Missing_Imputer(self, self.data, self.missing_predictors, replace='missing')
         #Step3: Binning Variables
-        self.data = self.Binner(self.data, self.binning_meta)
+        self.data = Preprocessing.Binner(self, self.data, self.binning_meta)
         #Step4: Encoding Variables
-        self.data = self.Encoder(self.data, self.encoding_meta)
+        self.data = Preprocessing.Encoder(self, self.data, self.encoding_meta)
         #Step5: Generate Dummies
-        self.data = self.Dumminizer(self.data, self.nominal_predictors, self.dummies_meta)
+        self.data = Preprocessing.Dumminizer(self, self.data, self.nominal_predictors, self.dummies_meta)
         #Step6: Scale Features
-        self.data = self.Scaler(self.data, self.features)
+        self.data = Preprocessing.Scaler(self, self.data, self.features)
         #Step7: Balancing
-        self.X, self.y = self.Balancer(self.data, self.features_selected, self.target, self.random_state)
+        self.X, self.y = Preprocessing.Balancer(self, self.data, self.features_selected, self.target, self.random_state)
         #Step8: Split for training
-        self.X_train, self.X_test, self.y_train, self.y_test = self.Data_Splitter(self.X, self.y,
+        self.X_train, self.X_test, self.y_train, self.y_test = Preprocessing.Data_Splitter(self, self.X, self.y,
                                                                                   test_size = self.test_size,
                                                                                   random_state = self.random_state)
         #Step9: Model Fit 
-        self.model = self.RFor(max_depth=self.max_depth, 
+        self.model = Models.RFor(self, max_depth=self.max_depth, 
                         min_samples_split=self.min_samples_split, 
                         n_estimators=self.n_estimators)
         self.model.fit(self.X_train, self.y_train)
 
         return self
 
-    #transform
+    #transform data
     def transform(self, data):
         data = data.copy()
         #Step1: Arrange Data
-        data = self.Data_Preparer(data, self.dropped_columns, self.renamed_columns)
+        data = Preprocessing.Data_Preparer(self, data, self.dropped_columns, self.renamed_columns)
         #Step2: Impute missing
-        data = self.Missing_Imputer(data, self.missing_predictors, replace='missing')
+        data = Preprocessing.Missing_Imputer(self, data, self.missing_predictors, replace='missing')
         #Step3: Binning Variables
-        data = self.Binner(data, self.binning_meta)
+        data = Preprocessing.Binner(self, data, self.binning_meta)
         #Step4: Encoding Variables
-        data = self.Encoder(data, self.encoding_meta)
+        data = Preprocessing.Encoder(self, data, self.encoding_meta)
         #Step5: Generate Dummies
-        data = self.Dumminizer(data, self.nominal_predictors, self.dummies_meta)
+        data = Preprocessing.Dumminizer(self, data, self.nominal_predictors, self.dummies_meta)
         #Step6: Scale Features
-        data = self.Scaler(data, self.features)
+        data = Preprocessing.Scaler(self, data, self.features)
         data = data[self.features_selected]
         return data
 
+    #predict
     def predict(self, data):
         #Step1: Engineer the data
         data = self.transform(data)
         #Step2: Predict
         predictions = self.model.predict(data)
         return predictions
-
+        
+    #evaluate
     def evaluate(self):
-        self.evaluate_classification(self.model, self.X_train, self.y_train, 
+        PostProcessing.evaluate_classification(self, self.model, self.X_train, self.y_train, 
                                      self.X_test, self.y_test)

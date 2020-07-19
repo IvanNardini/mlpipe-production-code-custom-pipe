@@ -1,7 +1,7 @@
 from sklearn.metrics import classification_report
 
 class PostProcessing:
-    
+
     def evaluate_classification(self, model, X_train, y_train, X_test, y_test):
         #Evaluate Train Sample
         # predictions_train = model.predict(X_train)

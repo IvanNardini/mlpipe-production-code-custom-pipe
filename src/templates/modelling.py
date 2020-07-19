@@ -5,7 +5,7 @@ import pandas as pd
 #Model
 from sklearn.ensemble import RandomForestClassifier
 
-class Model:
+class Models:
 
     def RFor(self, max_depth, min_samples_split, n_estimators):
         '''
