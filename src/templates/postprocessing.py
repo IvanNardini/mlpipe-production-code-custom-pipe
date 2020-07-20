@@ -3,6 +3,11 @@ from sklearn.metrics import classification_report
 class PostProcessing:
 
     def evaluate_classification(self, model, X_train, y_train, X_test, y_test):
+        '''
+        Evaluate classification
+        params: model, X_train, y_train, X_test, y_test
+        returns: None
+        '''
         #Evaluate Train Sample
         # predictions_train = model.predict(X_train)
         # score_train = round(model.score(X_train, y_train), 2)
@@ -22,3 +27,4 @@ class PostProcessing:
         print()
         print('Classification report - Test')
         print(classification_test)
+        return None

@@ -35,7 +35,7 @@ class Preprocessing:
         '''
         Imputes '?' character with 'missing' label
         :params: data, missing_predictors, replace
-        :return: Series
+        :return: DataFrame
         '''
         data = data.copy()
         for var in missing_predictors:
@@ -46,7 +46,7 @@ class Preprocessing:
         '''
         Create bins based on variable distributions
         :params: data, var, new_var_name, bins, bins_labels
-        :return: Series
+        :return: DataFrame
         '''
         data = data.copy()
         for var, meta in binning_meta.items():
@@ -100,6 +100,9 @@ class Preprocessing:
 
     def Balancer(self, data, features_selected, target, random_state):
         '''
+        Produce Syntetic sample with SMOTE
+        :params: features_selected, target, random_state
+        :return: X, y
         '''
         data = data.copy()
         smote = SMOTE(random_state=random_state)
