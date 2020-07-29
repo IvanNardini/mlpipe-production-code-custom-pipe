@@ -50,7 +50,7 @@ class Preprocessing:
         '''
         data = data.copy()
         for var, meta in binning_meta.items():
-            data[meta['var_name']] = pd.cut(data[var], bins = meta['bins'], labels=meta['bins_labels'], include_lowest= True)
+            data[meta['var_name']] = pd.cut(data[var], bins = meta['bins'], labels=meta['bins_labels'], include_lowest=True)
             data.drop(var, axis=1, inplace=True)
         return data
 
