@@ -39,7 +39,9 @@ class Pipeline():
         self.dummies_meta = dummies_meta
 
         ##Engineering metadata
-        self.random_state = 0
+        self.random_state_sample = 1
+        self.random_state_smote = 9
+        self.random_state_model = 8
         self.test_size = test_size
         self.max_depth = 25
         self.min_samples_split = 5
@@ -68,15 +70,15 @@ class Pipeline():
         #Step6: Scale Features
         self.data = Preprocessing.Scaler(self, self.data, self.features)
         #Step7: Balancing
-        self.X, self.y = Preprocessing.Balancer(self, self.data, self.features_selected, self.target, self.random_state)
+        self.X, self.y = Preprocessing.Balancer(self, self.data, self.features_selected, self.target, self.random_state_smote)
         #Step8: Split for training
         self.X_train, self.X_test, self.y_train, self.y_test = Preprocessing.Data_Splitter(self, self.X, self.y,
                                                                                   test_size = self.test_size,
-                                                                                  random_state = self.random_state)
+                                                                                  random_state = self.random_state_sample)
         #Step9: Model Fit 
         self.model = Models.RFor(self, max_depth=self.max_depth, 
                         min_samples_split=self.min_samples_split, 
-                        n_estimators=self.n_estimators)
+                        n_estimators=self.n_estimators, random_state=self.random_state_model)
         self.model.fit(self.X_train, self.y_train)
 
         return self
@@ -96,6 +98,7 @@ class Pipeline():
         data = Preprocessing.Dumminizer(self, data, self.nominal_predictors, self.dummies_meta)
         #Step6: Scale Features
         data = Preprocessing.Scaler(self, data, self.features)
+        #Step7: Select Features
         data = data[self.features_selected]
         return data
 
