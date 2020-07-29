@@ -26,7 +26,7 @@ pipeline = Pipeline(
                     binning_meta=config['binning_meta'],
                     encoding_meta=config['encoding_meta'],
                     dummies_meta=config['dummies_meta'],
-                    test_size=0.1
+                    test_size=0.20
                     )
 
 if __name__ == "__main__":
