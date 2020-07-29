@@ -98,6 +98,7 @@ class Pipeline():
         data = Preprocessing.Dumminizer(self, data, self.nominal_predictors, self.dummies_meta)
         #Step6: Scale Features
         data = Preprocessing.Scaler(self, data, self.features)
+        #Step7: Select Features
         data = data[self.features_selected]
         return data
 
