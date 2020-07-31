@@ -27,27 +27,30 @@ class FeatureEngineering:
         target_encoded = target.map(labels_dic).astype('category')
         return target_encoded
 
-    def binner(self, data, var, new_var_name, bins, bins_labels):
+    def binner(self, data, binning_meta):
         '''
         Create bins based on variable distributions
-        :params: data, var, new_var_name, bins, bins_labels
+        :params: data, binning_meta
         :return: DataFrame
         '''
         data = data.copy()
-        data[new_var_name] = pd.cut(data[var], bins = bins, labels=bins_labels, include_lowest = True)
-        data.drop(var, axis=1, inplace=True)
-        return data[new_var_name]
+        for var, meta in binning_meta.items():
+            data[meta['var_name']] = pd.cut(data[var], bins = meta['bins'], labels=meta['bins_labels'], include_lowest=True)
+            data.drop(var, axis=1, inplace=True)
+        return data
 
-    def encoder(self, data, var, mapping):
+    def encoder(self, data, encoding_meta):
         '''
         Encode all variables for training
-        :params: data, var, mapping
+        :params: data, encoding_meta
         :return: DataFrame
         '''
         data = data.copy()
-        if var not in data.columns.values.tolist():
-            pass
-        return data[var].map(mapping)
+        for var, meta in encoding_meta.items():
+            if var not in data.columns.values.tolist():
+                pass
+            data[var] = data[var].map(meta)
+        return data
 
     def dumminizer(self, data, columns_to_dummies):
         '''

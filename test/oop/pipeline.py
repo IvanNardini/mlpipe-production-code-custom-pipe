@@ -16,7 +16,7 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Pipeline():   
     
-    def __init__(self, dropped_columns, renamed_columns, missing_predictors, target, predictors, target_encoding):
+    def __init__(self, dropped_columns, renamed_columns, missing_predictors, target, predictors, target_encoding, binning_meta, encoding_meta):
 
         ##Data
         self.data = None
@@ -34,11 +34,11 @@ class Pipeline():
         self.missing_predictors = missing_predictors
         self.target = target
         self.predictors = predictors
-        self.target_encoding = target_encoding
-        # self.encoding_meta = encoding_meta
         # self.features = features
         # self.features_selected = features_selected
-        # self.binning_meta = binning_meta
+        self.target_encoding = target_encoding
+        self.binning_meta = binning_meta
+        self.encoding_meta = encoding_meta
         
         # self.dummies_meta = dummies_meta
 
@@ -84,11 +84,10 @@ class Pipeline():
                                                     )
         #Step7: Encode Target
         self.y_train = FeatureEngineering.target_encoder(self, self.y_train, self.target_encoding)
-
-        
-    #     self.data = Preprocessing.Binner(self, self.data, self.binning_meta)
-    #     #Step4: Encoding Variables
-    #     self.data = Preprocessing.Encoder(self, self.data, self.encoding_meta)
+        #Step8: Bin variables
+        self.X_train = FeatureEngineering.binner(self, self.data, self.binning_meta)
+        #Step9: Encoding Variables
+        self.X_train = FeatureEngineering.encoder(self, self.data, self.encoding_meta)
     #     #Step5: Generate Dummies
     #     self.data = Preprocessing.Dumminizer(self, self.data, self.nominal_predictors, self.dummies_meta)
     #     #Step6: Scale Features
