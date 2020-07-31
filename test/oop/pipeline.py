@@ -102,7 +102,7 @@ class Pipeline():
         #Step10: Generate Dummies
         self.X_train = FeatureEngineering.dumminizer(self, self.X_train, 
                                                             self.nominal_predictors)
-        self.X_test = FeatureEngineering.dumminizer(self, self.X_train, 
+        self.X_test = FeatureEngineering.dumminizer(self, self.X_test, 
                                                             self.nominal_predictors)
         #Step11: Scale Features
         self.scaler = FeatureEngineering.scaler_trainer(self, self.X_train)
