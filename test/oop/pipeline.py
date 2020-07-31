@@ -154,7 +154,6 @@ class Pipeline():
         data = FeatureEngineering.dumminizer(self, data, 
                                             self.nominal_predictors)
         #Step8: Scale Features
-        self.scaler = FeatureEngineering.scaler_trainer(self, data)
         data = FeatureEngineering.scaler_transformer(self, data, 
                                                     self.features,
                                                     self.scaler)
