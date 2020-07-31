@@ -16,7 +16,7 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Pipeline():   
     
-    def __init__(self, dropped_columns, renamed_columns, missing_predictors):
+    def __init__(self, dropped_columns, renamed_columns, missing_predictors, target, predictors, target_encoding):
 
         ##Data
         self.data = None
@@ -32,16 +32,20 @@ class Pipeline():
         self.renamed_columns = renamed_columns
         self.anomalies = 'umbrella_limit'
         self.missing_predictors = missing_predictors
-        # self.nominal_predictors = nominal_predictors
+        self.target = target
+        self.predictors = predictors
+        self.target_encoding = target_encoding
+        # self.encoding_meta = encoding_meta
         # self.features = features
         # self.features_selected = features_selected
         # self.binning_meta = binning_meta
-        # self.encoding_meta = encoding_meta
+        
         # self.dummies_meta = dummies_meta
 
         ## metadata
         self.replace = 'missing'
-        # self.random_state_sample = 1
+        self.test_size = 0.1
+        self.random_state_sample = 1
         # self.random_state_smote = 9
         # self.random_state_model = 8
         # self.test_size = test_size
@@ -69,9 +73,18 @@ class Pipeline():
         self.data = Preprocessing.missing_imputer(self, self.data, 
                                                   self.missing_predictors,
                                                   replace=self.replace)
+        #Step6: Split data
+        self.X_train, self.X_test, self.y_train, self.y_test = Preprocessing.data_splitter(
+                                                    self,
+                                                    self.target,
+                                                    self.predictors,
+                                                    self.test_size,
+                                                    self.random_state_sample
+                                                    )
+        #Step7: Encode Target
+        self.y_train = FeatureEngineering.target_encoder(self, self.y_train, self.encoding_meta)
+
         
-    #     self.data = Preprocessing.Missing_Imputer(self, self.data, self.missing_predictors, replace='missing')
-    #     #Step3: Binning Variables
     #     self.data = Preprocessing.Binner(self, self.data, self.binning_meta)
     #     #Step4: Encoding Variables
     #     self.data = Preprocessing.Encoder(self, self.data, self.encoding_meta)
