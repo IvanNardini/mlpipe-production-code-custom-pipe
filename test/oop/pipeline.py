@@ -50,7 +50,6 @@ class Pipeline():
         self.scaler = None
         self.random_state_smote = 9
         self.random_state_model = 8
-        self.test_size = test_size
         self.max_depth = 25
         self.min_samples_split = 5
         self.n_estimators= 300
