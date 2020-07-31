@@ -26,14 +26,12 @@ pipeline = Pipeline(
                     missing_predictors=PREPROCESSING['missing_predictors'],
                     target = DATA_INGESTION['data_map']['target'],
                     predictors = PREPROCESSING['predictors'],
+                    nominal_predictors=FEATURES_ENGINEERING['nominal_predictors'],
+                    features=FEATURES_ENGINEERING['features'], 
+                    features_selected=FEATURES_ENGINEERING['features_selected'],
                     target_encoding = FEATURES_ENGINEERING['target_encoding'],
                     binning_meta = FEATURES_ENGINEERING['binning_meta'],
                     encoding_meta=FEATURES_ENGINEERING['encoding_meta']
-                    # nominal_predictors=config['nominal_predictors'],
-                    # features=config['features'], 
-                    # features_selected=config['features_selected'],                  
-                    # dummies_meta=config['dummies_meta'],
-                    # test_size=0.20
                     )
 
 if __name__ == "__main__":

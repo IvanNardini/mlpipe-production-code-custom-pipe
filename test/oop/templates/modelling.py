@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 class Models:
 
-    def Rfor(self, max_depth, min_samples_split, n_estimators, random_state, output_path):
+    def Rfor(self, max_depth, min_samples_split, n_estimators, random_state):
         '''
         Train the model and store it
         :params: max_depth, min_samples_split, n_estimators, random_state, output_path

@@ -62,29 +62,28 @@ class FeatureEngineering:
         data = pd.get_dummies(data, columns=columns_to_dummies)
         return data
 
-    def scaler_trainer(self, data, scaler_path):
+    def scaler_trainer(self, data):
         '''
         Fit the scaler on predictors
-        :params: data, scaler_path
+        :params: data
         :return: scaler
         '''
         data = data.copy()
         scaler = MinMaxScaler()
         scaler.fit(data)
-        joblib.dump(scaler, scaler_path)
         return scaler
     
-    def scaler_transformer(self, data, scaler_path):
+    def scaler_transformer(self, data, features):
         '''
         Trasform the data 
         :params: data, scaler
         :return: DataFrame
         ''' 
         data = data.copy()
-        scaler = joblib.load(scaler_path)
-        return scaler.transform(data)
+        data[features] = scaler.transform(data[features])
+        return data[features]
 
-    def feature_selector(self, data, features_selected):
+    def features_selector(self, data, features_selected):
         '''
         Select features
         :params: data, features_selected
