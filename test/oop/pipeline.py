@@ -76,6 +76,7 @@ class Pipeline():
         #Step6: Split data
         self.X_train, self.X_test, self.y_train, self.y_test = Preprocessing.data_splitter(
                                                     self,
+                                                    self.data,
                                                     self.target,
                                                     self.predictors,
                                                     self.test_size,
