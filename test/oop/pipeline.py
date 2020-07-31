@@ -86,22 +86,37 @@ class Pipeline():
         #Step7: Encode Target
         self.y_train = FeatureEngineering.target_encoder(self, self.y_train, 
                                                         self.target_encoding)
+        self.y_test = FeatureEngineering.target_encoder(self, self.y_test, 
+                                                        self.target_encoding)
+
         #Step8: Bin variables
         self.X_train = FeatureEngineering.binner(self, self.X_train,
+                                                        self.binning_meta)
+        self.X_test = FeatureEngineering.binner(self, self.X_test,
                                                         self.binning_meta)
         #Step9: Encoding Variables
         self.X_train = FeatureEngineering.encoder(self, self.X_train, 
                                                         self.encoding_meta)
+        self.X_test = FeatureEngineering.encoder(self, self.X_test, 
+                                                        self.encoding_meta)
         #Step10: Generate Dummies
         self.X_train = FeatureEngineering.dumminizer(self, self.X_train, 
+                                                            self.nominal_predictors)
+        self.X_test = FeatureEngineering.dumminizer(self, self.X_train, 
                                                             self.nominal_predictors)
         #Step11: Scale Features
         self.scaler = FeatureEngineering.scaler_trainer(self, self.X_train)
         self.X_train = FeatureEngineering.scaler_transformer(self, self.X_train, 
                                                             self.features,
                                                             self.scaler)
+        self.X_test = FeatureEngineering.scaler_transformer(self, self.X_test, 
+                                                            self.features,
+                                                            self.scaler)
         #Step 12: Select Features
         self.X_train = FeatureEngineering.features_selector(self, self.X_train,
+                                                            self.features_selected)
+
+        self.X_test = FeatureEngineering.features_selector(self, self.X_test,
                                                             self.features_selected)
         #Step12: Balancing
         self.X_train, self.y_train = FeatureEngineering.balancer(self, self.X_train, 
@@ -118,34 +133,34 @@ class Pipeline():
     #transform data
     def transform(self, data):
         #Initialize
-        self.data = data
+        data = data.copy()
         #Step1: Drop columns 
-        self.data = Preprocessing.dropper(self, self.data, self.dropped_columns)
+        data = Preprocessing.dropper(self, data, self.dropped_columns)
         #Step2: Rename columns 
-        self.data = Preprocessing.renamer(self, self.data, self.renamed_columns)
+        data = Preprocessing.renamer(self, data, self.renamed_columns)
         #Step3: Remove anomalies
-        self.data = Preprocessing.anomalizier(self, self.data, self.anomalies)
+        data = Preprocessing.anomalizier(self, data, self.anomalies)
         #Step4: Impute missing
-        self.data = Preprocessing.missing_imputer(self, self.data, 
+        data = Preprocessing.missing_imputer(self, data, 
                                                   self.missing_predictors,
                                                   replace=self.replace)
         #Step5: Bin variables
-        self.data = FeatureEngineering.binner(self, self.data,
-                                                        self.binning_meta)
+        data = FeatureEngineering.binner(self, data,
+                                        self.binning_meta)
         #Step6: Encoding Variables
-        self.data = FeatureEngineering.encoder(self, self.data, 
-                                                        self.encoding_meta)
+        data = FeatureEngineering.encoder(self, data, 
+                                        self.encoding_meta)
         #Step7: Generate Dummies
-        self.data = FeatureEngineering.dumminizer(self, self.data, 
-                                                            self.nominal_predictors)
+        data = FeatureEngineering.dumminizer(self, data, 
+                                            self.nominal_predictors)
         #Step8: Scale Features
-        self.scaler = FeatureEngineering.scaler_trainer(self, self.data)
-        self.data = FeatureEngineering.scaler_transformer(self, self.data, 
-                                                            self.features,
-                                                            self.scaler)
+        self.scaler = FeatureEngineering.scaler_trainer(self, data)
+        data = FeatureEngineering.scaler_transformer(self, data, 
+                                                    self.features,
+                                                    self.scaler)
         #Step 9: Select Features
-        self.data = FeatureEngineering.features_selector(self, self.data,
-                                                            self.features_selected)
+        data = FeatureEngineering.features_selector(self, data,
+                                                    self.features_selected)
         return data
 
     #predict
