@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./object-oriented-pipe
+cd ./oop
 
 for script in $*; do
     if [ $script == 'test' ]; then

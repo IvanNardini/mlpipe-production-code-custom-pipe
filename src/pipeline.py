@@ -2,6 +2,7 @@
 pipeline modules contains the pipeline object
 '''
 from templates.data_preprocessing import Preprocessing
+from templates.features_engineering import FeatureEngineering
 from templates.modelling import Models
 from templates.postprocessing import PostProcessing
 
