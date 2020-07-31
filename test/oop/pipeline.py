@@ -83,7 +83,7 @@ class Pipeline():
                                                     self.random_state_sample
                                                     )
         #Step7: Encode Target
-        self.y_train = FeatureEngineering.target_encoder(self, self.y_train, self.encoding_meta)
+        self.y_train = FeatureEngineering.target_encoder(self, self.y_train, self.target_encoding)
 
         
     #     self.data = Preprocessing.Binner(self, self.data, self.binning_meta)
