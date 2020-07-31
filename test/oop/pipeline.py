@@ -98,7 +98,8 @@ class Pipeline():
         #Step11: Scale Features
         self.scaler = FeatureEngineering.scaler_trainer(self, self.X_train)
         self.X_train = FeatureEngineering.scaler_transformer(self, self.X_train, 
-                                                            self.features)
+                                                            self.features,
+                                                            self.scaler)
         #Step 12: Select Features
         self.X_train = FeatureEngineering.features_selector(self, self.X_train,
                                                             self.features_selected)

@@ -73,7 +73,7 @@ class FeatureEngineering:
         scaler.fit(data)
         return scaler
     
-    def scaler_transformer(self, data, features):
+    def scaler_transformer(self, data, features, scaler):
         '''
         Trasform the data 
         :params: data, scaler
