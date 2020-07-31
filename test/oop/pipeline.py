@@ -45,7 +45,7 @@ class Pipeline():
 
         ## metadata
         self.replace = 'missing'
-        self.test_size = 0.1
+        self.test_size = 0.10
         self.random_state_sample = 1
         self.scaler = None
         self.random_state_smote = 9
