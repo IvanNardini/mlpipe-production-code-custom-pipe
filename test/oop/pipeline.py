@@ -85,9 +85,9 @@ class Pipeline():
         #Step7: Encode Target
         self.y_train = FeatureEngineering.target_encoder(self, self.y_train, self.target_encoding)
         #Step8: Bin variables
-        self.X_train = FeatureEngineering.binner(self, self.data, self.binning_meta)
+        self.X_train = FeatureEngineering.binner(self, self.X_train, self.binning_meta)
         #Step9: Encoding Variables
-        self.X_train = FeatureEngineering.encoder(self, self.data, self.encoding_meta)
+        self.X_train = FeatureEngineering.encoder(self, self.X_train, self.encoding_meta)
     #     #Step5: Generate Dummies
     #     self.data = Preprocessing.Dumminizer(self, self.data, self.nominal_predictors, self.dummies_meta)
     #     #Step6: Scale Features
