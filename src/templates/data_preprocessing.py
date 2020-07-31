@@ -19,21 +19,13 @@ warnings.simplefilter('ignore', yaml.error.UnsafeLoaderWarning)
 
 class Preprocessing:
 
-    # Preprocessing functions
-    def loader(self, datapath):
-        '''
-        Load the data for training
-        :params: datapath
-        :return: DataFrame
-        '''
-        return pd.read_csv(datapath)
-
     def dropper(self, data, columns_to_drop):
         '''
         Drop columns
         :params: data, columns_to_drop
         :return: DataFrame
         '''
+        data = data.copy()
         data.drop(columns_to_drop, axis=1, inplace=True)
         return data
 
@@ -43,6 +35,7 @@ class Preprocessing:
         :params: data, columns_to_rename
         :return: DataFrame
         '''
+        data = data.copy()
         data.rename(columns=columns_to_rename, inplace=True)
         return data
 
@@ -52,6 +45,7 @@ class Preprocessing:
         :params: data, anomaly_var
         :return: DataFrame
         '''
+        data = data.copy()
         flt = data[anomaly_var]>=0
         return data[flt]
 
@@ -61,6 +55,7 @@ class Preprocessing:
         :params: data, var, replace
         :return: Series
         '''
+        data = data.copy()
         data[columns_to_impute] = data[columns_to_impute].replace('?', replace)
         return data
 
@@ -70,7 +65,7 @@ class Preprocessing:
         :params: data, target, predictors, test_size, random_state
         :return: X_train, X_test, y_train, y_test
         '''
-        
+        data = data.copy()
         X_train, X_test, y_train, y_test = train_test_split(data[predictors],
                                                             data[target],
                                                             test_size=test_size,

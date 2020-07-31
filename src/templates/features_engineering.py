@@ -27,52 +27,69 @@ class FeatureEngineering:
         target_encoded = target.map(labels_dic).astype('category')
         return target_encoded
 
-    def binner(self, data, var, new_var_name, bins, bins_labels):
-        data[new_var_name] = pd.cut(data[var], bins = bins, labels=bins_labels, include_lowest = True)
-        data.drop(var, axis=1, inplace=True)
-        return data[new_var_name]
-
-    def encoder(self, data, var, mapping):
+    def binner(self, data, binning_meta):
         '''
-        Encode all variables for training
-        :params: data, var, mapping
+        Create bins based on variable distributions
+        :params: data, binning_meta
         :return: DataFrame
         '''
-        if var not in data.columns.values.tolist():
-            pass
-        return data[var].map(mapping)
+        data = data.copy()
+        for var, meta in binning_meta.items():
+            data[meta['var_name']] = pd.cut(data[var], bins = meta['bins'], labels=meta['bins_labels'], include_lowest=True)
+            data.drop(var, axis=1, inplace=True)
+        return data
+
+    def encoder(self, data, encoding_meta):
+        '''
+        Encode all variables for training
+        :params: data, encoding_meta
+        :return: DataFrame
+        '''
+        data = data.copy()
+        for var, meta in encoding_meta.items():
+            if var not in data.columns.values.tolist():
+                pass
+            data[var] = data[var].map(meta)
+        return data
 
     def dumminizer(self, data, columns_to_dummies):
+        '''
+        Generate dummies for nominal variables
+        :params: data, columns_to_dummies, dummies_meta
+        :return: DataFrame
+        '''
+        data = data.copy()
         data = pd.get_dummies(data, columns=columns_to_dummies)
         return data
 
-    def scaler_trainer(self, data, scaler_path):
+    def scaler_trainer(self, data):
         '''
         Fit the scaler on predictors
-        :params: data, scaler_path
+        :params: data
         :return: scaler
         '''
-        
+        data = data.copy()
         scaler = MinMaxScaler()
         scaler.fit(data)
-        joblib.dump(scaler, scaler_path)
         return scaler
     
-    def scaler_transformer(self, data, scaler_path):
+    def scaler_transformer(self, data, features, scaler):
         '''
         Trasform the data 
         :params: data, scaler
         :return: DataFrame
         ''' 
-        scaler = joblib.load(scaler_path)
-        return scaler.transform(data)
+        data = data.copy()
+        data[features] = scaler.transform(data[features])
+        return data[features]
 
-    def feature_selector(self, data, features_selected):
+    def features_selector(self, data, features_selected):
         '''
         Select features
         :params: data, features_selected
         :return: DataFrame
         '''
+        data = data.copy()
         data = data[features_selected]
         return data
 
@@ -82,6 +99,7 @@ class FeatureEngineering:
         :params: data, target, random_state
         : X, y
         '''
+        data = data.copy()
         smote = SMOTE(random_state=random_state)
         X, y = smote.fit_resample(data, target)
         return X,y

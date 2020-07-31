@@ -10,8 +10,8 @@ class Models:
     def RFor(self, max_depth, min_samples_split, n_estimators, random_state):
         '''
         Train the model and store it
-        :params: max_depth, min_samples_split, n_estimators
-        :return: RandomForestClassifier class
+        :params: max_depth, min_samples_split, n_estimators, random_state, output_path
+        :return: None
         '''
         # initialise the model
         rfor = RandomForestClassifier(max_depth=max_depth, 
