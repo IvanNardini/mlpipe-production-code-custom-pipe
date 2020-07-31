@@ -115,34 +115,48 @@ class Pipeline():
 
         return self
 
-    # #transform data
-    # def transform(self, data):
-    #     data = data.copy()
-    #     #Step1: Arrange Data
-    #     data = Preprocessing.Data_Preparer(self, data, self.dropped_columns, self.renamed_columns)
-    #     #Step2: Impute missing
-    #     data = Preprocessing.Missing_Imputer(self, data, self.missing_predictors, replace='missing')
-    #     #Step3: Binning Variables
-    #     data = Preprocessing.Binner(self, data, self.binning_meta)
-    #     #Step4: Encoding Variables
-    #     data = Preprocessing.Encoder(self, data, self.encoding_meta)
-    #     #Step5: Generate Dummies
-    #     data = Preprocessing.Dumminizer(self, data, self.nominal_predictors, self.dummies_meta)
-    #     #Step6: Scale Features
-    #     data = Preprocessing.Scaler(self, data, self.features)
-    #     #Step7: Select Features
-    #     data = data[self.features_selected]
-    #     return data
+    #transform data
+    def transform(self, data):
+        #Initialize
+        self.data = data
+        #Step1: Drop columns 
+        self.data = Preprocessing.dropper(self, self.data, self.dropped_columns)
+        #Step2: Rename columns 
+        self.data = Preprocessing.renamer(self, self.data, self.renamed_columns)
+        #Step3: Remove anomalies
+        self.data = Preprocessing.anomalizier(self, self.data, self.anomalies)
+        #Step4: Impute missing
+        self.data = Preprocessing.missing_imputer(self, self.data, 
+                                                  self.missing_predictors,
+                                                  replace=self.replace)
+        #Step5: Bin variables
+        self.data = FeatureEngineering.binner(self, self.data,
+                                                        self.binning_meta)
+        #Step6: Encoding Variables
+        self.data = FeatureEngineering.encoder(self, self.data, 
+                                                        self.encoding_meta)
+        #Step7: Generate Dummies
+        self.data = FeatureEngineering.dumminizer(self, self.data, 
+                                                            self.nominal_predictors)
+        #Step8: Scale Features
+        self.scaler = FeatureEngineering.scaler_trainer(self, self.data)
+        self.data = FeatureEngineering.scaler_transformer(self, self.data, 
+                                                            self.features,
+                                                            self.scaler)
+        #Step 9: Select Features
+        self.data = FeatureEngineering.features_selector(self, self.data,
+                                                            self.features_selected)
+        return data
 
-    # #predict
-    # def predict(self, data):
-    #     #Step1: Engineer the data
-    #     data = self.transform(data)
-    #     #Step2: Predict
-    #     predictions = self.model.predict(data)
-    #     return predictions
+    #predict
+    def predict(self, data):
+        #Step1: Engineer the data
+        data = self.transform(data)
+        #Step2: Predict
+        predictions = self.model.predict(data)
+        return predictions
         
-    # #evaluate
-    # def evaluate(self):
-    #     PostProcessing.evaluate_classification(self, self.model, self.X_train, self.y_train, 
-    #                                  self.X_test, self.y_test)
+    #evaluate
+    def evaluate(self):
+        PostProcessing.evaluate_classification(self, self.model, self.X_train, self.y_train, 
+                                     self.X_test, self.y_test)
