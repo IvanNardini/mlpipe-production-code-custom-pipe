@@ -52,7 +52,7 @@ class Preprocessing:
     def missing_imputer(self, data, columns_to_impute, replace='missing'):
         '''
         Imputes '?' character with 'missing' label
-        :params: data, var, replace
+        :params: data, columns_to_impute, replace
         :return: Series
         '''
         data = data.copy()
